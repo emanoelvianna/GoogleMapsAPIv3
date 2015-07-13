@@ -1,6 +1,7 @@
 
 var map;
 var rectangle;
+var infoWindow;
 
 function initialize() {
     var position = new google.maps.LatLng(-30.05, -51.18);
@@ -32,7 +33,7 @@ function initialize() {
 
     google.maps.event.addListener(rectangle, 'bounds_changed', showNewRect);
     
-    
+    infoWindow = new google.maps.InfoWindow();
        
 }
 
@@ -61,13 +62,19 @@ function points(map,locations) {
 
 }
 
-function d() {
-    window.onload = function() {
-    var c = document.getElementById("myCanvas");
-    var ctx = c.getContext("2d");
-    var img = document.getElementById("scream");
-    ctx.drawImage(img, 10, 10);
-    }   
+function showNewRect(event) {
+  var ne = rectangle.getBounds().getNorthEast();
+  var sw = rectangle.getBounds().getSouthWest();
+
+  var contentString = '<b>Rectangle moved.</b><br>' +
+      'New north-east corner: ' + ne.lat() + ', ' + ne.lng() + '<br>' +
+      'New south-west corner: ' + sw.lat() + ', ' + sw.lng();
+
+  // Set the info window's content and position.
+  infoWindow.setContent(contentString);
+  infoWindow.setPosition(ne);
+
+  infoWindow.open(map);
 }
 
 //initialize();
